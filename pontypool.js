@@ -72,15 +72,15 @@ var overlays = {
 };
 
 // load vecor data
-$.getJSON('./parcels.geojson').done(function( data ) {
+$.getJSON('./data/parcels.geojson').done(function( data ) {
     parcels.addData(data.features);
 });
 
-$.getJSON('./roads.geojson').done(function( data ) {
+$.getJSON('./data/roads.geojson').done(function( data ) {
     roads.addData(data.features);
 });
 
-$.getJSON('./5mcontour.geojson').done(function( data ) {
+$.getJSON('./data/5mcontour.geojson').done(function( data ) {
     contour.addData(data.features);
 });
 

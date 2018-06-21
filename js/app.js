@@ -38,7 +38,21 @@ var baseMaps = {
 var parcelStyle = {
     "color": "#ff7800",
     "weight": 1.5,
-    "fillOpacity": 0
+    "fillOpacity": 0.25
+};
+
+var ourParcelStyle = {
+    "color": "#ff7800",
+    "weight": 1.5,
+    "fillColor": "#73b7d8",
+    "fillOpacity": 0.2
+};
+
+var casementStyle = {
+    "color": "#ff7800",
+    "weight": 1.5,
+    "fillColor": "#797979",
+    "fillOpacity": 0.4
 };
 
 var roadStyle = {
@@ -54,11 +68,27 @@ var contourStyle = {
 // VECTOR LAYERS
 var parcels = L.geoJSON(null,{
     attribution: cc,
-    style: parcelStyle
+    style: function(feature, layer) {
+        if (feature.properties.PID == 3516619){
+            return ourParcelStyle
+        } else if (feature.properties.CAD_TYPE1 == 'Casement') {
+            return casementStyle
+        } else {
+            return parcelStyle
+        }
+    }
 });
 
 var roads = L.geoJSON(null,{
-    style: roadStyle
+    style: roadStyle,
+    onEachFeature: function(feature, layer) {
+        var label = L.marker([feature.properties.labelY, feature.properties.labelX], {
+            icon: L.divIcon({
+                className: 'label',
+                html: '<div style="padding-bottom:5px;transform:rotate('+feature.properties.bearing+'deg)">'+feature.properties.Length+'m</div>'
+            })
+        }).addTo(map);
+      }
 });
 
 var contour = L.geoJSON(null,{

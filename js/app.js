@@ -12,17 +12,18 @@ function onError(e) {
 }
 
 // BASEMAPS
-var listUrl = 'https://services.thelist.tas.gov.au/arcgis/rest/services/Basemaps/{id}/ImageServer/tile/{z}/{y}/{x}'
+var listBasemapUrl = 'https://services.thelist.tas.gov.au/arcgis/rest/services/Basemaps/{id}/ImageServer/tile/{z}/{y}/{x}'
+var listWMSUrl = 'http://services.thelist.tas.gov.au/arcgis/services/Public/{id}/MapServer/WMSServer?';
 var cc = 'Map data <img class="cc" src="https://mirrors.creativecommons.org/presskit/buttons/80x15/png/by-nc-nd.png" alt="CC BY-NC-ND"> the LIST &copy; State of Tasmania';
 
-var topo = L.tileLayer(listUrl, {
+var topo = L.tileLayer(listBasemapUrl, {
     id: 'Topographic',
     attribution: cc,
     maxNativeZoom:18,
     maxZoom:20
 });
 
-var ortho = L.tileLayer(listUrl, {
+var ortho = L.tileLayer(listBasemapUrl, {
     id: 'Orthophoto',
     attribution: cc,
     maxNativeZoom:18,
@@ -60,13 +61,29 @@ var roadStyle = {
     "weight": 3
 };
 
-var contourStyle = {
+/*var contourStyle = {
     "color": "#ff00ff",
     "weight": 1
-};
+};*/
 
 // VECTOR LAYERS
-var parcels = L.geoJSON(null,{
+var cadParcels = L.tileLayer.wms(listWMSUrl, {
+    id: 'CadastreParcels',
+    layers: '0',
+    format: 'image/png',
+    transparent: true,
+    attribution: cc
+});
+
+var contour = L.tileLayer.wms(listWMSUrl, {
+    id: 'TopographyAndRelief',
+    layers: '38',
+    format: 'image/png',
+    transparent: true,
+    attribution: cc
+});
+
+var ourParcels = L.geoJSON(null,{
     attribution: cc,
     style: function(feature, layer) {
         if (feature.properties.PID == 3516619){
@@ -91,38 +108,40 @@ var roads = L.geoJSON(null,{
       }
 });
 
-var contour = L.geoJSON(null,{
+/*var contour = L.geoJSON(null,{
     style: contourStyle
-});
+});*/
 
 var overlays = {
-    "Parcels": parcels,
+    "The Block": ourParcels,
     "Roads": roads,
-    "5m contour": contour
+    "5m contour": contour,
+    "Parcels": cadParcels
 };
 
 // load vecor data
 $.getJSON('./data/parcels.geojson').done(function( data ) {
-    parcels.addData(data.features);
+    ourParcels.addData(data.features);
 });
 
 $.getJSON('./data/roads.geojson').done(function( data ) {
     roads.addData(data.features);
 });
 
-$.getJSON('./data/5mcontour.geojson').done(function( data ) {
+/*$.getJSON('./data/5mcontour.geojson').done(function( data ) {
     contour.addData(data.features);
-});
+});*/
 
 // MAP & CONTROLS
 var map = L.map('mapid',{
     center: [-42.3308, 147.9555],
     zoom:17,
-    layers: [ortho,parcels,roads]
+    layers: [ortho,ourParcels,roads]
 });
 
 L.control.layers(baseMaps, overlays).addTo(map);
 L.control.locate().addTo(map);
+//wmsLayer.addTo(map);
 
 // LOCATOR
 //map.locate({setView: true, maxZoom: 16});

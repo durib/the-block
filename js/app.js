@@ -12,8 +12,9 @@ function onError(e) {
 }
 
 // BASEMAPS
-var listBasemapUrl = 'https://services.thelist.tas.gov.au/arcgis/rest/services/Basemaps/{id}/ImageServer/tile/{z}/{y}/{x}'
-var listWMSUrl = 'http://services.thelist.tas.gov.au/arcgis/services/Public/{id}/MapServer/WMSServer?';
+var listServicesUrl = 'https://services.thelist.tas.gov.au/arcgis/rest/services/'
+var listBasemapUrl = listServicesUrl + 'Basemaps/{id}/ImageServer/tile/{z}/{y}/{x}'
+var listWMSUrl = listServicesUrl + 'Public/{id}/MapServer/WMSServer?';
 var cc = 'Map data <img class="cc" src="https://mirrors.creativecommons.org/presskit/buttons/80x15/png/by-nc-nd.png" alt="CC BY-NC-ND"> the LIST &copy; State of Tasmania';
 
 var topo = L.tileLayer(listBasemapUrl, {
@@ -34,6 +35,32 @@ var baseMaps = {
     "Topographic": topo,
     "Orthophoto": ortho
 };
+
+// WMS LAYERS
+var cadParcels = L.tileLayer.wms(listWMSUrl, {
+    id: 'CadastreParcels',
+    layers: '0',
+    format: 'image/png',
+    transparent: true,
+    attribution: cc
+});
+
+var contour = L.tileLayer.wms(listWMSUrl, {
+    id: 'TopographyAndRelief',
+    layers: '38',
+    format: 'image/png',
+    transparent: true,
+    attribution: cc
+});
+
+var landTeunre = L.tileLayer.wms(listWMSUrl, {
+    id: 'CadastreAndAdministrative',
+    layers: '32',
+    format: 'image/png',
+    transparent: true,
+    attribution: cc,
+    opacity: 0.6
+});
 
 // VECTOR STYLES
 var parcelStyle = {
@@ -67,22 +94,6 @@ var roadStyle = {
 };*/
 
 // VECTOR LAYERS
-var cadParcels = L.tileLayer.wms(listWMSUrl, {
-    id: 'CadastreParcels',
-    layers: '0',
-    format: 'image/png',
-    transparent: true,
-    attribution: cc
-});
-
-var contour = L.tileLayer.wms(listWMSUrl, {
-    id: 'TopographyAndRelief',
-    layers: '38',
-    format: 'image/png',
-    transparent: true,
-    attribution: cc
-});
-
 var ourParcels = L.geoJSON(null,{
     attribution: cc,
     style: function(feature, layer) {
@@ -116,7 +127,8 @@ var overlays = {
     "The Block": ourParcels,
     "Roads": roads,
     "5m contour": contour,
-    "Parcels": cadParcels
+    "Parcels": cadParcels,
+    "Land Tenure" : landTeunre
 };
 
 // load vecor data
@@ -142,6 +154,11 @@ var map = L.map('mapid',{
 L.control.layers(baseMaps, overlays).addTo(map);
 L.control.locate().addTo(map);
 //wmsLayer.addTo(map);
+
+// LEGEND
+//landTenureLegendUrl = listServicesUrl + 'Public/CadastreAndAdministrative/MapServer/WmsServer?';
+//landTenureLegendUrl += 'request=GetLegendGraphic%26version=1.3.0%26format=image/png%26layer=32';
+//L.wmsLegend(landTenureLegendUrl);
 
 // LOCATOR
 //map.locate({setView: true, maxZoom: 16});

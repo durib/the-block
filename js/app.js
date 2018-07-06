@@ -41,7 +41,8 @@ var cadParcels = L.tileLayer.wms(listWMSUrl, {
     layers: '0',
     format: 'image/png',
     transparent: true,
-    attribution: cc
+    attribution: cc,
+    maxZoom:20
 });
 
 var contour = L.tileLayer.wms(listWMSUrl, {
@@ -49,48 +50,31 @@ var contour = L.tileLayer.wms(listWMSUrl, {
     layers: '38',
     format: 'image/png',
     transparent: true,
-    attribution: cc
+    attribution: cc,
+    maxZoom:20
 });
 
 var landTeunre = L.tileLayer.wms(listWMSUrl, {
     id: 'CadastreAndAdministrative',
-    layers: '32',
+    layers: '36',
     format: 'image/png',
     transparent: true,
     attribution: cc,
+    maxZoom:20,
     opacity: 0.6
 });
 
 // VECTOR STYLES
-var parcelStyle = {
-    "color": "#ff7800",
-    "weight": 1.5,
-    "fillOpacity": 0.25
-};
-
 var ourParcelStyle = {
     "color": "#ff7800",
     "weight": 1.5,
-    "fillColor": "#73b7d8",
-    "fillOpacity": 0.2
-};
-
-var casementStyle = {
-    "color": "#ff7800",
-    "weight": 1.5,
-    "fillColor": "#797979",
-    "fillOpacity": 0.4
+    "fillOpacity": 0
 };
 
 var roadStyle = {
     "color": "#ff0000",
     "weight": 3
 };
-
-/*var contourStyle = {
-    "color": "#ff00ff",
-    "weight": 1
-};*/
 
 // VECTOR LAYERS
 var ourParcels = L.geoJSON(null,{
@@ -118,10 +102,6 @@ var roads = L.geoJSON(null,{
       }
 });
 
-/*var contour = L.geoJSON(null,{
-    style: contourStyle
-});*/
-
 var overlays = {
     "The Block": ourParcels,
     "Roads": roads,
@@ -139,15 +119,11 @@ $.getJSON('./data/roads.geojson').done(function( data ) {
     roads.addData(data.features);
 });
 
-/*$.getJSON('./data/5mcontour.geojson').done(function( data ) {
-    contour.addData(data.features);
-});*/
-
 // MAP & CONTROLS
 var map = L.map('mapid',{
     center: [-42.3308, 147.9555],
     zoom:17,
-    layers: [ortho,ourParcels,roads]
+    layers: [ortho,ourParcels,roads],
 });
 
 L.control.layers(baseMaps, overlays).addTo(map);
@@ -158,8 +134,3 @@ L.control.locate().addTo(map);
 //landTenureLegendUrl = listServicesUrl + 'Public/CadastreAndAdministrative/MapServer/WmsServer?';
 //landTenureLegendUrl += 'request=GetLegendGraphic%26version=1.3.0%26format=image/png%26layer=32';
 //L.wmsLegend(landTenureLegendUrl);
-
-// LOCATOR
-//map.locate({setView: true, maxZoom: 16});
-//map.on('locationfound', onLocationFound);
-//map.on('locationerror', onError);

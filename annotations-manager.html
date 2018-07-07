@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>The Block Annotation Manager</title>
+        <meta charset="utf-8" />
+        <script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script>
+        <script src="./js/annotations.js"></script>
+    </head>
+    <body>
+        <table border = 1>
+            <td>
+                <table border = 1>
+                <caption>Table Operations</caption>
+                <td><input id="createTableButton" type="button" value="Create Table" onclick="createAnnotations();" /></td><td><input id="deleteTableButton" type="button" value="Delete Table" onclick="deleteAnnotations();" /></td><td><input id="listTablebutton" type="button" value="List Tables" onclick="listAnnotations();" /></td>
+                </table>
+            </td>
+            <td>
+                <table border = 1>
+                    <caption>CRUD Operations</caption>
+                    <td><input id="createItem" type="button" value="Create Item" onclick="createItem();" /></td><td><input id="readItem" type="button" value="Read Item" onclick="readItem();" /></td><td><input id="updateItem" type="button" value="Update Item" onclick="updateItem();" /><td><input id="deleteItem" type="button" value="Delete Item" onclick="deleteItem();" /></td></td>
+                </table>
+            </td>
+            <td>
+                <table border = 1>
+                    <caption>Query and Scan</caption>
+                    <td><input id="queryData" type="button" value="Query" onclick="queryData();" /></td><td><input id="scanData" type="button" value="Scan" onclick="scanData();" /></td>
+                </table>
+            </td>
+            <td>
+                <table border = 1>
+                    <caption>Import JSON</caption>
+                    <td><input type="file" id="fileinput" accept='application/json'/></td>
+                </table>
+            </td>
+        </table>
+        <br>
+        <textarea readonly id= "textarea" style="width:400px; height:800px"></textarea>
+
+        <script>
+            document.getElementById('fileinput').addEventListener('change', processFile, false);
+        </script>
+    </body>
+</html>

@@ -123,7 +123,7 @@ $.getJSON('./data/roads.geojson').done(function( data ) {
 var map = L.map('mapid',{
     center: [-42.3308, 147.9555],
     zoom:17,
-    layers: [ortho,ourParcels,roads],
+    layers: [ortho,ourParcels],
 });
 
 L.control.layers(baseMaps, overlays).addTo(map);

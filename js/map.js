@@ -79,21 +79,15 @@ var roadStyle = {
 // VECTOR LAYERS
 var ourParcels = L.geoJSON(null,{
     attribution: cc,
-    style: function(feature, layer) {
-        if (feature.properties.PID == 3516619){
-            return ourParcelStyle
-        } else if (feature.properties.CAD_TYPE1 == 'Casement') {
-            return casementStyle
-        } else {
-            return parcelStyle
-        }
+    style: function(feature) {
+        return ourParcelStyle;
     }
 });
 
 var roads = L.geoJSON(null,{
     style: roadStyle,
     onEachFeature: function(feature, layer) {
-        var label = L.marker([feature.properties.labelY, feature.properties.labelX], {
+        L.marker([feature.properties.labelY, feature.properties.labelX], {
             icon: L.divIcon({
                 className: 'label',
                 html: '<div style="padding-bottom:5px;transform:rotate('+feature.properties.bearing+'deg)">'+feature.properties.Length+'m</div>'
@@ -111,11 +105,11 @@ var overlays = {
 };
 
 // load vecor data
-$.getJSON('./data/parcels.geojson').done(function( data ) {
+$.getJSON('./data/parcels.geojson').done(function(data) {
     ourParcels.addData(data.features);
 });
 
-$.getJSON('./data/roads.geojson').done(function( data ) {
+$.getJSON('./data/roads.geojson').done(function(data) {
     roads.addData(data.features);
 });
 

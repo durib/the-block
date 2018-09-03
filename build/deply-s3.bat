@@ -1,1 +1,0 @@
-aws s3 cp ../ s3://duri.rocks/ --recursive --acl public-read --exclude "*.bat" --exclude "*.git/*" --exclude ".*" --exclude README.md --exclude LICENSE

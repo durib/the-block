@@ -1,0 +1,1 @@
+aws s3 cp ~/code/duri-rocks/maps/the-block/ s3://duri.rocks/maps/the-block/ --recursive --acl public-read --exclude ".git/*" --exclude ".*" --exclude "*.bat" --exclude "*.md" --exclude "LICENSE"
